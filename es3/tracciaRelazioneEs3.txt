@@ -1,0 +1,20 @@
+Architettura degli Elaboratori 2
+Esercizi di gruppo validi come esonero per la parte pratica dell'esame
+ESERCIZIO 3: Analisi del comportamento di metodi ricorsivi
+
+INTRODUZIONE: Codifica binaria della INVOKEVIRTUAL: come si individua la posizione nell'area dei 
+metodi del metodo da richiamare e dove si trovano le informazioni sul numero di parametri e di variabili locali. 
+La struttura dei record di attivazione in MIC-1: breve descrizione, eventualmente utilizzare una rappresentazione 
+sotto forma di tabella per illustrare tale struttura.
+
+IL METODO ASSEGNATO: Analizzare il programma fornito per lo svolgimento dell'esercizio e indiviuare la posizione del metodo ricorsivo 
+ivi contenuto (indicare nella relazione l'indirizzo di partenza del metodo ricorsivo nell'area dei metodi). 
+Indicare in quali punti del codice tale metodo viene richiamato (indicare la posizione nell'area dei metodi
+delle INVOKEVIRTUAL riferite al metodo ricorsivo). 
+
+ANALISI DEL COMPORTAMENTO DEL METODO RICORSIVO: inserire dei breakpoint in alcuni punti chiave del codice e 
+procedere per (macro)step allo scopo di descrivere il contenuto della memoria ad ogni interruzione. 
+Nella relazione spiegare come sono stati scelti i punti dove inserire i breakpoint. 
+Mostrare la memoria dopo alcuni richiami ricorsivi del metodo, e poi nei momenti del ritorno che 
+ritenete significativi dal punto di vista di questo esercizio. Provare ad individuare per alcuni casi di 
+test il massimo livello di profondità raggiunto dal metodo.

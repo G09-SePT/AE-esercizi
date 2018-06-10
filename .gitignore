@@ -50,3 +50,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Compiled IJVM e MAL
+*.mic1
+*.ijvm
+*.mne

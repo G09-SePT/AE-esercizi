@@ -1,0 +1,179 @@
+.constant
+	OBJREF 0x40			// needed for method invokation
+// **********************************************************
+// le seguenti costanti definiscono i massimi e i minimi
+// degli insiemi considerati (mem[SP - 1] e TOS). Per una
+// spiegazione approfondita si veda la sezione "COME È STATO 
+// SVOLTO IL TEST" presente nella relazione allegata.
+// **********************************************************
+
+// -------- modificare a seconda del gruppo -----------------
+// ==========================================================
+// NB: qualora si voglia testare altre istruzioni IJVM (si
+// veda label opc_loop) ridefinire le costanti, secondo il 
+// confronto da effettuare, rispettando le condizioni imposte
+// nei commenti. La violazione di quest'ultime viene segnalata
+// con un messaggio a video.
+// ==========================================================
+	// condizione: MIN_TOS < MAX_TOS
+	MAX_TOS 1	// definizione del massimo dell'insieme TOS
+	MIN_TOS -1	// definizione del minimo dell'insieme TOS
+	// condizione: MIN_OPC < MAX_OPC
+	MAX_OPC -2147483645	// definizione del massimo dell'insieme OPC
+	MIN_OPC -2147483648	// definizione del minimo dell'insieme OPC
+// -----------------------------------------------------------
+.end-constant
+
+.main
+.var
+	tos
+	opc
+.end-var
+// ------------- (start) controllo validità insiemi ----------
+// ===========================================================
+// il seguente blocco di codice fa uso del metodo check_set
+// per controllare la validità degli insiemi e nel caso di
+// fallimento stampa un messaggio di errore (si veda label
+// invalid) e poi esce se sono state violate le condizioni 
+// richieste nella sezione constant.
+// ===========================================================
+		LDC_W OBJREF		// prepare for method call
+		LDC_W MIN_TOS		// minimo dell'insieme TOS
+		LDC_W MAX_TOS		// massimo dell'insieme TOS
+		INVOKEVIRTUAL check_set	// invoca check_set
+		IFEQ invalid		// salta a stampare messaggio di errore e termina
+		LDC_W OBJREF		// prepare for method call
+		LDC_W MIN_OPC		// minimo dell'insieme OPC
+		LDC_W MAX_OPC		// massimo dell'insieme OPC
+		INVOKEVIRTUAL check_set	// invoca check_set
+		IFEQ invalid		// salta a stampare messaggio di errore e termina
+// -------------(end) controllo validità insiemi -------------	
+
+		LDC_W MAX_TOS
+		ISTORE tos
+		
+init_opc:	LDC_W MIN_OPC
+		ISTORE opc		
+		
+opc_loop:	ILOAD opc
+		ILOAD tos
+		// -------- ISTRUZIONI DA TESTARE modificare a seconda del gruppo ----------
+		// =========================================================================
+		// si riportano, sottoforma di commento, le relazioni che intercorrono tra 
+		// gli insiemi TOS e mem[SP - 1] (indicato con OPC), per ognuna delle 
+		// istruzioni di confronto. Il test non effettua controlli sulle relazioni, 
+		// se esse non vengono rispettate il test potrebbe dare risultati imprevisti. 
+		// Il controllo è stato omesso perché richiederebbe l'utilizzo  delle stesse 
+		// istruzioni che vengono testate.
+		// ES: IF_ICMPNE richiederebbe che 
+		// 	MIN_TOS != MIN_OPC && MAX_TOS != MAX_OPC
+		// l'operatore != viene realizzato con IF_ICMPNE, che deve essere testato
+		// NB: in alcuni casi si possono testare due o più istruzioni insieme
+		// ==========================================================================
+		IF_ICMPLT next	// relazione insiemistica: OPC < TOS; non può essere testata con IF_ICMPGT
+		//IF_ICMPGE next	// relazione insiemistica: OPC >= TOS; non può essere testata con IF_ICMPLE
+		//IF_ICMPLE next	// relazione insiemistica: OPC <= TOS; non può essere testata con IF_ICMPGE
+		//IF_ICMPNE next	// relazione insiemistica: OPC != TOS; non può essere testata con IF_ICMPEQ
+		//IF_ICMPGT next	// relazione insiemistica: OPC > TOS; non può essere testata con IF_ICMPLT
+		//IF_ICMPEQ next	// relazione insiemistica: OPC == TOS; non può essere testata con IF_ICMPNE 
+		// ---------------------------------------------------------------------------
+		NOP	// permette di terminare le operazioni di rd, wr, fetch sulla memoria
+		HALT
+		
+next:		ILOAD opc
+		LDC_W MAX_OPC
+		IF_ICMPEQ dec_tos	
+		IINC opc 1
+		GOTO opc_loop
+		
+dec_tos:	ILOAD tos
+		LDC_W MIN_TOS
+		IF_ICMPEQ done
+		IINC tos -1
+		GOTO init_opc
+
+// ---------- (start) stampa messaggio di successo del test ------------
+// =====================================================================
+// questa label viene raggiunta nel caso di test terminato con successo,
+// stampato il messaggio termina.
+// =====================================================================		
+done:		BIPUSH 0x44 // D
+		OUT
+		BIPUSH 0x4F // O
+		OUT
+		BIPUSH 0x4E // N
+		OUT
+		BIPUSH 0x45 // E
+		OUT
+		HALT
+// ---------- (end) stampa messaggio di successo del test ------------
+
+// ------------- (start) stampa errore di insieme invalido ----------
+// ==================================================================
+// questa label viene raggiunta solo nel caso in cui le condizioni
+// per le costanti che rappresentano il massimo e il minimo di uno
+// dei due insiemi (mem[SP - 1] e TOS) sono violate. Stampato il
+// messaggio, termina.
+// ================================================================== 
+invalid:	BIPUSH 0x49     //I
+		OUT
+		BIPUSH 0x4e     //N
+		OUT
+		BIPUSH 0x56     //V
+		OUT
+		BIPUSH 0x41     //A
+		OUT
+		BIPUSH 0x4c     //L
+		OUT
+		BIPUSH 0x49     //I
+		OUT
+		BIPUSH 0x44     //D
+		OUT
+		BIPUSH 0x20     // 
+		OUT
+		BIPUSH 0x53     //S
+		OUT
+		BIPUSH 0x45     //E
+		OUT
+		BIPUSH 0x54     //T
+		OUT
+		HALT
+// ------------- (end) stampa errore di insieme invalido ----------
+.end-main
+
+// *******************************************************************
+// il metodo check_set prende in input il massimo e il minimo degli 
+// insiemi mem[SP - 1] e TOS e controlla la validità delle condizioni 
+// richieste nella sezione constant. Restituisce 1(=true, C-like) in 
+// caso di successo, 0(=false, C-like) altrimenti.
+// *******************************************************************
+.method check_set(min, max)
+// ------------- (start) realizzo XOR in IJVM ----------
+// =====================================================
+// realizzo uno XOR usando le operazioni, AND, OR e -
+// 	min XOR max == (min OR max) - (min AND max)
+// se il risultato è < 0 allora min e max sono discordi,
+// la loro differenza potrebbe generare overflow
+// NB: questo codice realizza IF_ICMPLE, l'idea di base
+// viene presa dalla funzione cmp del file test_mal.c
+// =====================================================
+		ILOAD min
+		DUP
+		ILOAD max
+		IOR
+		ILOAD min
+		ILOAD max
+		IAND
+		ISUB
+		IFLT overflow
+// ------------- (end) realizzo XOR in IJVM ----------
+		ILOAD max	// non genero overflow
+		ISUB		// posso eseguire la differenza tra min e max
+		DUP
+		IFEQ true	// min e max coincidono, perciò l'insieme è formato da un solo elemento
+overflow:	IFLT true	// che generi o no overflow, l'intero in cima allo stack (min o min-max) deve essere valutato per < 0
+		BIPUSH 0	// restitusco false, min > max
+return:		IRETURN
+true:		BIPUSH 1	// restitusco true, min <= max
+		GOTO return
+.end-method

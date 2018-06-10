@@ -1,0 +1,15 @@
+.constant
+TOS -2
+OPC -1
+.end-constant
+
+.main
+	LDC_W OPC
+	LDC_W TOS
+	IF_ICMPLT then
+	BIPUSH 0x46
+fi:	OUT
+	HALT
+then:	BIPUSH 0x54
+	GOTO fi
+.end-main

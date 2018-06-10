@@ -55,3 +55,8 @@ dkms.conf
 *.mic1
 *.ijvm
 *.mne
+
+# CLion files
+.idea/
+cmake-build-debug/
+CMakeLists.txt

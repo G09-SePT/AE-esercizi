@@ -1,0 +1,48 @@
+Architettura degli Elaboratori 2
+Esercizi di gruppo validi come esonero per la parte pratica dell'esame
+ESERCIZIO 1: Estensione del microinterprete
+
+IL GRUPPO
+Inserite i nomi dei componenti indicando il ruolo di ciascun componente nello svolgimento dell'esercizio. 
+Spiegate come vi siete coordinati (se avete lavorato in modo indipendente su aspetti diversi e vi 
+siete poi incontrati per confrontarvi e mettere insieme le idee e quanto realizzato o se invece avete sempre 
+lavorato insieme, se per coordinarvi vi siete sempre incontrati di persona o avete usato strumenti 
+di condivisione in rete, ecc... ).
+
+SPECIFICA DELLA NUOVA ISTRUZIONE
+
+In questa sezione dovrete inserire la descrizione precisa della specifica della nuova istruzione che il 
+vostro gruppo doveva realizzare e integrare nel microinterprete. Potete riportare sinteticamente quanto si trova sul sito
+oracle https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html eventualmente tradotto in italiano.
+
+DISCUSSIONE DEI PROBLEMI DA AFFRONTARE E DELLA SOLUZIONE INDIVIDUATA
+
+Qui potete sinteticamente riassumere i principali problemi e spiegare come siete giunti alla soluzione finale
+illustrando anche attraverso schemi grafici (es. flow chart) la procedura che realizza la nuova istruzione IJVM che avete 
+implementatato usando il linguaggio MAL.
+
+Potete eventualmente confrontare il codice creato con quello dell'istruzione più simile già presente nel microinterprete 
+(evidenziando punti in comune e differenze principali).
+
+Se avete implementato prima una soluzione che non considerava il problema dell'overflow e successivamente 
+quella completa potete brevemente mostrare le differenze.
+
+COME E' STATO SVOLTO IL TEST
+
+In questa sezione dovete spiegare quali test avete eseguito per verificare la presenza di eventuali problemi. 
+I test saranno programmi IJVM (che dovranno essere consegnati): dovete spiegare il criterio seguito per decidere 
+sia i valori dei parametri su cui testare l'istruzione aggiunta, ma anche la collocazione dell'istruzione all'interno
+del codice di TEST (per esempio per verificare che l'istruzione aggiornasse correttamente lo stack e i 
+registri TOS e PC).
+
+E' opportuno utilizzare la finestra "Debug" per mostrare qualche esempio di esecuzione che mostri 
+i possibili percorsi all'interno del vostro codice (il contenuto della finestra si può selezionare, 
+copiare e incollare come testo: questo è preferibile rispetto all'uso di screenshot).
+
+COMMENTI CONCLUSIVI
+
+Nell'ultima sezione potete sottolineare le difficoltà incontrate e il metodo di lavoro utilizzato per risolverle.
+Se riuscite ad inserire una stima complessiva del tempo medio impiegato per completare l'esercizio 
+(in termini di ore/persona complessive, quindi sommando le ore impiegate da ciascun componente del gruppo) 
+possibilmente indicando anche quanto tempo è stato impiegato in lavoro fatto insieme e quanto in lavoro individuale
+svolto in autonomia, sarebbe molto utile avere questa informazione. 

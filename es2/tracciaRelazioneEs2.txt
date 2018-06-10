@@ -1,0 +1,27 @@
+Architettura degli Elaboratori 2
+Esercizi di gruppo validi come esonero per la parte pratica dell'esame
+ESERCIZIO 2: Produzione di codice IJVM a partire da pseudo codice C-like e metodi già pronti
+
+REALIZZAZIONE DEL CODICE IJVM
+Questa sezione può essere anche relativamente breve se il codice è ben commentato. Potete spiegare le regole 
+generali che avete utilizzato per tradurre lo pseudo-codice in codice IJVM e indicare se in qualche caso
+avete scelto una traduzione un po' adattata per motivi di efficienza.
+Eventualmente indicate anche problemi incontrati a livello di compilazione (difficoltà a rispettare la sintassi 
+del linguaggio o a interpretare le segnalazioni del compilatore).
+
+Se avete realizzato il programmino in C che genera automaticamente il codice per le stampe includerlo 
+nella consegna e commentare brevemente nella relazione come è stato realizzato.
+
+COME E' STATO SVOLTO IL TEST
+
+In questa sezione dovete spiegare quali test avete eseguito per verificare la presenza di eventuali problemi. 
+Evidenziate eventuali errori che siete riusciti a scoprire con il test e come li avete "debuggati" e corretti.
+In una tabella potete inserire i valori in input testati spiegando come avete scelto l'insieme di prova.
+
+COMMENTI CONCLUSIVI
+
+Nell'ultima sezione potete sottolineare le difficoltà incontrate e il metodo di lavoro utilizzato per risolverle.
+Se riuscite ad inserire una stima complessiva del tempo medio impiegato per completare l'esercizio 
+(in termini di ore/persona complessive, quindi sommando le ore impiegate da ciascun componente del gruppo) 
+possibilmente indicando anche quanto tempo è stato impiegato in lavoro fatto insieme e quanto in lavoro individuale
+svolto in autonomia, sarebbe molto utile avere questa informazione. 

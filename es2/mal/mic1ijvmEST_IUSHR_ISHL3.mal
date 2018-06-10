@@ -38,6 +38,10 @@
 .label  goto1       0xA7
 .label  ireturn1    0xAC
 .label  ior1        0xB0
+.label  iushrIII1   0x7b
+.label  iushrIV1    0x7d
+.label  iushr1      0x7c
+.label  ishl3_1     0x28
 .label  invokevirtual1  0xB6
 .label  wide1       0xC4
 .label  halt1       0xFF
@@ -144,84 +148,6 @@ ifeq2   OPC = TOS           // Save TOS in OPC temporarily
 ifeq3   TOS = MDR           // Put new top of stack in TOS
 ifeq4   Z = OPC; if (Z) goto T; else goto F // Branch on Z bit
 
-// *************************************************************************************************************************************
-// Il codice è stato implementato originariamente per non gestire l'OVERFLOW (si veda il file allegato, mic1ijvmC_SePT_no-OVERFLOW.mal),
-// esso è stato prodotto basandosi sull'idea di IF_ICMPEQ. Si è duplicato il codice di quest'ultimo modificando le label if_icmpeq3, 
-// if_icmpeq4 e if_icmpeq6 nelle rispettive if_icmplt3, if_icmplt4 e if_icmplt6; dato che la differenza doveva avvenire tra
-// mem[SP-1] - TOS e si doveva controllare il flip-flop N e non, come avveniva in IF_ICMPEQ, TOS - mem[SP-1] (in tal caso si sarebbe
-// realizzato TOS < mem[SP-1]) controllando il flip-flop Z.
-// Nella corrente versione si sono dovute inserire label aggiuntive per poter gestire il possibile OVERFLOW. Esse sono state strutturate
-// al fine di evitare label supplementari per realizzare correttamente le diramazioni (si veda la label: NEG).
-// *************************************************************************************************************************************
-
-if_icmplt1  MAR = SP = SP - 1; rd	// Read in next-to-top word of stack
-if_icmplt2  MAR = SP = SP - 1		// Set MAR to read in new top-of-stack
-if_icmplt3  OPC = MDR; rd		// Copy mem[SP-1] to OPC
-if_icmplt4  H = TOS			// Save TOS in H temporarily
-if_icmplt5  TOS = MDR			// Put new top of stack in TOS
-
-// ---------------------------------------- (start) OPC: positivo o negativo ? ---------------------------------------------------
-// ===============================================================================================================================
-// verifica il segno dell'operando contenuto nel registro temporaneo OPC, più precisamente mem[SP-1], se è positivo salta alla 
-// label POS, altrimenti salta a NEG
-// ===============================================================================================================================
-
-if_icmplt6  N = OPC; if (N) goto NEG; else goto POS 
-
-// ---------------------------------------- (end) OPC: positivo o negativo ? -----------------------------------------------------
-
-// ------------------------------------- (start) OPC: positivo. TOS: positivo o negativo ? ---------------------------------------
-// ===============================================================================================================================
-// verifica il segno dell'operando nel registro H, più precisamente TOS, tenendo in considerazione il fatto che siamo già a 
-// conoscenza della positività di mem[SP-1]. Questo confronto in realtà ci dice se c'è possibilità o meno di avere OVERFLOW 
-// (conoscendo discordanza o concordanza degli operandi)
-// ===============================================================================================================================
-
-POS   N = H; if (N) goto OVERFLOW; else goto NO_OVERFLOW
-
-// ------------------------------------- (end) OPC: positivo. TOS: positivo o negativo ? -----------------------------------------
-
-// ------------------------------------- (start) OPC: negativo. TOS: positivo o negativo ? ---------------------------------------
-// ===============================================================================================================================
-// esegue sempre il confronto fatto dalla microistruzione precedente, ma questa volta le label sulle diramazioni dovrebbero essere 
-// invertite:
-//			NEG   N = H; if (N) goto NO_OVERFLOW; else goto OVERFLOW
-// Tuttavia questa implementazione non è accettabile perché prima (label POS) abbiamo definito che la label OVERFLOW ha un
-// indirizzo distante 256 (0x100) rispetto la label NO_OVERFLOW, ma adesso stiamo facendo l'esatto opposto. Il compilatore MAL 
-// avrebbe dei problemi nell'assegnare gli indirizzi alle labels. Ovviamo all'inconveniete facendo il complemento a uno dell'
-// operando TOS, contenuto nel registro H, scambiando in questo modo le label nelle diramazioni. Si noti che il valore assoluto 
-// dell'operando non è lo stesso, ma a noi interessa solo il segno.
-// ================================================================================================================================
-
-NEG   N = NOT H; if (N) goto OVERFLOW; else goto NO_OVERFLOW
-
-// ------------------------------------- (end) OPC: negativo. TOS: positivo o negativo ? ------------------------------------------
-
-// ---------------------------------------- (start) nessuna possibilità di overflow -----------------------------------------------
-// ================================================================================================================================
-// viene raggiunta solo nel caso in cui i segni siano concordi, ovvero quando non vi è alcuna possibilità di OVERFLOW
-// ================================================================================================================================
-
-NO_OVERFLOW N = OPC - H; if (N) goto T; else goto F // If top 2 words are OPC < H, goto T, else goto F
-
-// ---------------------------------------- (end) nessuna possibilità di overflow -------------------------------------------------
-
-// --------------------------------------------- (start) possibilità di overflow --------------------------------------------------
-// ================================================================================================================================
-// viene raggiunta solo nel caso in cui i segni siano discordi, ovvero quando si ha una possibilità di OVERFLOW, tenendo in 
-// considerazione le casistiche trattate nella relazione (si veda sezione "DISCUSSIONE DEI PROBLEMI DA AFFRONTARE E DELLA SOLUZIONE 
-// INDIVIDUATA") abbiamo solo due casi in cui si verifca OVERFLOW per tanto possiamo semplicemente controllare il segno di uno solo 
-// dei due operandi per restituire il risultato del confronto di IF_ICMPLT, in questo caso si è scelto OPC, ma equivalentemente vale:
-// 			OVERFLOW N = NOT H; if (N) goto T; else goto F
-// Quest'ultima però richiede un'operazione supplemenatare alla ALU ovvero il complemento a uno di H.
-// ================================================================================================================================
-
-OVERFLOW N = OPC; if (N) goto T; else goto F
-
-// --------------------------------------------- (end) possibilità di overflow --------------------------------------------------
-
-// *************************************************************************************************************************************
-
 if_icmpeq1  MAR = SP = SP - 1; rd   // Read in next-to-top word of stack
 if_icmpeq2  MAR = SP = SP - 1   // Set MAR to read in new top-of-stack
 if_icmpeq3  H = MDR; rd     // Copy second stack word to H
@@ -318,3 +244,83 @@ in1 OPC=H=-1
         MAR=H+OPC;rd            // compute IN address ; read from input
     MAR=SP=SP+1         // increment SP; wait for read
     TOS=MDR;wr ; goto Main1     // Write 
+
+// IUSHR3: Variante di IUSHR in cui il secondo operando non è sullo stack ma vale 3 - utile per stampa numeri in rappresentazione base 8
+iushrIII1 TOS = TOS >> 1
+iushrIII2 N = TOS; if (N) goto iushrIII6; else goto iushrIII3
+iushrIII3 TOS = TOS >> 1
+iushrIII4 MDR = TOS = TOS >> 1 // terzo shift a destra
+iushrIII5 MAR = SP; wr; goto Main1
+iushrIII6 OPC = 1 << 8; // la parte seguente crea una maschera 0x7FFFFFF
+iushrIII7 OPC = OPC << 8; // per azzerare il bit di segno
+iushrIII8 OPC = OPC >> 1 
+iushrIII9 OPC = OPC << 8
+iushrIII10 OPC = OPC << 8
+iushrIII11 H = NOT OPC
+iushrIII12 TOS = TOS AND H;goto iushrIII3
+
+// IUSHR4: Variante di IUSHR in cui il secondo operando non è sullo stack ma vale 4 - utile per stampa numeri in rappresentazione base 16
+iushrIV1 TOS = TOS >> 1
+iushrIV2 N = TOS; if (N) goto iushrIV6; else goto iushrIV3
+iushrIV3 TOS = TOS >> 1
+iushrIV3bis TOS = TOS >> 1
+iushrIV4 MDR = TOS = TOS >> 1 // quarto shift a destra
+iushrIV5 MAR = SP; wr; goto Main1
+iushrIV6 OPC = 1 << 8; // la parte seguente crea una maschera 0x7FFFFFF
+iushrIV7 OPC = OPC << 8; // per azzerare il bit di segno
+iushrIV8 OPC = OPC >> 1 
+iushrIV9 OPC = OPC << 8
+iushrIV10 OPC = OPC << 8
+iushrIV11 H = NOT OPC
+iushrIV12 TOS = TOS AND H;goto iushrIV3
+
+// IUSHR - da specifica JVM: nessun argomento, sullo stack valore da shiftare v1 (in SP-1) e v2 di quanto (in SP) - sono da considerare solo i 5 bit meno significativi di v2
+iushr1 MAR=SP=SP-1;rd // leggi il numero da shiftare
+iushr2 H=OPC=1;    	// H =OPC = 00......01
+iushr3 H=OPC=H+OPC+1;	// H =OPC = 00.....011
+iushr4 H=OPC=H+OPC+1;	// H =OPC = 00....0111
+iushr5 H=OPC=H+OPC+1;	// H =OPC = 00...01111
+iushr6 H=OPC=H+OPC+1;	// H =OPC = 00..011111
+iushr7 OPC=TOS=TOS AND H;   // selezionati 5 bit meno significativi del TOS => s = quanto shiftare
+iushr8 Z=OPC; if (Z) goto iushr21; else goto iushr9 // se s==0 finito
+iushr9  MDR = MDR >> 1;goto iushr10  // se no shift a destra
+iushr9b MDR = MDR >> 1;goto iushr10
+iushr10 OPC=OPC-1; if (Z) goto iushr11; else goto iushr9b // controlla se concluso shift
+iushr11 N=MDR; if (N) goto iushr12; else goto iushr20;    // se Il valore da shiftare era positivo, finito
+iushr12 OPC = NOT TOS;   // se no si può sommare 2<< NOT s (su 5 bit)
+iushr13 OPC = OPC AND H; // and con MASCHERA per selezionare ultimi 5 bit
+iushr14 H=1;
+iushr15 TOS=H=H+1; // H = 2
+iushr16 Z=OPC; if (Z) goto iushr19; else goto iushr17 // calcolo 2<<not s
+iushr17 TOS = H = TOS+H; // TOS=H=H<<1
+iushr18 OPC=OPC-1; goto iushr16
+iushr19 TOS=MDR=MDR+H;wr; goto Main1 // SE ERA NEGATIVO ELIMINO I BIT DI SEGNO PROPAGATI 
+iushr20 TOS=MDR;wr;goto Main1 // fine nel caso non fosse negativo
+iushr21 TOS=MDR;goto Main1 // fine nel caso s==0
+
+// ISHL3 shifta il top dello stack a sinistra di 3 bit
+ishl3_1   H = TOS
+ishl3_2   H= TOS = TOS+H; goto ishl3_3
+ishl3_3   H = TOS = TOS+H; goto ishl3_4
+ishl3_4   MDR = TOS = TOS+H; goto ishl3_5
+ishl3_5   MAR = SP; wr; goto Main1
+
+// FINE ISTRUZIONI AGGIUNTE
+
+
+// IF_ICMPLT 
+if_icmplt1  MAR = SP = SP - 1; rd	// Read in next-to-top word of stack
+if_icmplt2  MAR = SP = SP - 1		// Set MAR to read in new top-of-stack
+if_icmplt3  OPC = MDR; rd		// Copy mem[SP-1] to OPC
+if_icmplt4  H = TOS			// Save TOS in H temporarily
+if_icmplt5  TOS = MDR			// Put new top of stack in TOS
+if_icmplt6  N = OPC; if (N) goto NEG; else goto POS 
+
+POS   N = H; if (N) goto OVERFLOW; else goto NO_OVERFLOW
+NEG   N = NOT H; if (N) goto OVERFLOW; else goto NO_OVERFLOW
+
+NO_OVERFLOW N = OPC - H; if (N) goto T; else goto F // If top 2 words are OPC < H, goto T, else goto F
+
+OVERFLOW N = OPC; if (N) goto T; else goto F
+
+

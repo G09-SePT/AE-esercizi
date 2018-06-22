@@ -1,0 +1,9 @@
+Vista la natura di interazione con l'utente del programma sarebbe stato impossibile eseguire test automatici approfonditi usando solo codice IJVM,
+quindi abbiamo deciso di modificare il sorgente dell'emulatore(trovato nella cartella /opt dei PC del laboratorio di informatica) in modo che potesse 
+simulare l'input di una persona reale che utilizza l'emulatore.
+Per farlo abbiamo modificato la classe MainMemory che tra le altre cose si occupa di leggere e scrivere dalla memoria i valori che devono essere
+mandati in output o letti con le istruzioni IN e OUT in modo che oltre ad aggiornare la grafica dell'emulatore comunicasse con una nuova classe 
+creata da noi chiamata HumanSimulator.
+HumanSimulator genera numeri ottali casuali che vengono poi "scritti" nell'input dell'emulatore, quando il programma stampa il risultato viene
+confrontato con quello calcolato in java, se il risulato è corretto il programma prosegue con il test successivo, altrimenti si blocca.
+I numeri usati e il risultato di ogni test vengono scritti sulla console da cui è stato lanciato l'emulatore.

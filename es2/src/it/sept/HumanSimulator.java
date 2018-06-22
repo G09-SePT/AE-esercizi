@@ -3,18 +3,24 @@ package it.sept;
 import java.util.Random;
 import java.util.Vector;
 
+/**
+ * 
+ * 
+ * @author Alderico.
+ * @version 2018.0
+ */
 public class HumanSimulator
 {
 	private static String readBuffer = ""; //Contiene i caratteri che vengono scritti con l'istruzione OUT sull'output dell'emulatore
-	public static Vector key_buffer = new Vector(); //Contiene la lista di tasti premuti dall'utente che il programma iJVM preleva con l'istruzione IN
+	public static Vector key_buffer = new Vector(); //Contiene la lista di tasti premuti dall'utente che il programma IJVM preleva con l'istruzione IN
 
-	private static int progress = 0; //Fase del programma iJVM
+	private static int progress = 0; //Fase del programma IJVM
 	private static int n1 = 0; //Primo numero
 	private static int n2 = 0; //Secondo numero
 	private static int numSuccess = 0; //Numero di test che hanno dato esito positivo
 
 	/**
-	 * Metodo che genera un numero ottale casuale e assegna a n1 o n2(in base alla fase del programma) il numero generato
+	 * @return Un numero ottale generato casualmente assegnandolo a n1 o n2(in base alla fase del programma)
 	 */
 	private static String randomIntToOctalString()
 	{
@@ -35,6 +41,7 @@ public class HumanSimulator
 	/**
 	 * Metodo che viene chiamato quando viene eseguita un'istruzione OUT
 	 * Aggiunge i caratteri ricevuti al buffer ed esegue il test
+	 * @param data
 	 */
 	public static void setInput(String data)
 	{
@@ -85,7 +92,7 @@ public class HumanSimulator
 	}
 
 	/**
-	 * Testa il risultato prodotto dal programma iJVM confrontandolo con quello calcolato da java
+	 * Testa il risultato prodotto dal programma IJVM confrontandolo con quello calcolato da java
 	 * @param risultato
 	 * @return
 	 */
@@ -101,6 +108,9 @@ public class HumanSimulator
 		return javaRes.substring(0,31).equals(risultato.substring(0,31));
 	}
 
+	/**
+	 * Pulisce il buffer
+	 */
 	public static void clearReadBuffer()
 	{
 		readBuffer = "";

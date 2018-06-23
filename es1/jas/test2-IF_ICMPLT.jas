@@ -59,7 +59,7 @@ opc_loop:	ILOAD opc
 		ILOAD tos
 		// -------- ISTRUZIONI DA TESTARE modificare a seconda del gruppo ----------
 		// =========================================================================
-		// si riportano, sottoforma di commento, le relazioni che intercorrono tra 
+		// si riportano, sotto forma di commento, le relazioni che intercorrono tra 
 		// gli insiemi TOS e mem[SP - 1] (indicato con OPC), per ognuna delle 
 		// istruzioni di confronto. Il test non effettua controlli sulle relazioni, 
 		// se esse non vengono rispettate il test potrebbe dare risultati imprevisti. 
@@ -172,8 +172,8 @@ invalid:	BIPUSH 0x49     //I
 		DUP
 		IFEQ true	// min e max coincidono, perciò l'insieme è formato da un solo elemento
 overflow:	IFLT true	// che generi o no overflow, l'intero in cima allo stack (min o min-max) deve essere valutato per < 0
-		BIPUSH 0	// restitusco false, min > max
+		BIPUSH 0	// restituisco false, min > max
 return:		IRETURN
-true:		BIPUSH 1	// restitusco true, min <= max
+true:		BIPUSH 1	// restituisco true, min <= max
 		GOTO return
 .end-method

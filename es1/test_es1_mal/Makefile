@@ -1,4 +1,4 @@
-# si fa uso del flag -ftrapv per constrastare il flag -fstrict-overflow
+# si fa uso del flag -ftrapv per contrastare il flag -fstrict-overflow
 # quest'ultimo, per ottimizzare il codice, fa si che il compilatore
 # assume che gli overflow non accadono
 CFLAGS=-Wall -pedantic -std=c99 -O2 -g -ftrapv

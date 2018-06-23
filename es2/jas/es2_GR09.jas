@@ -23,7 +23,7 @@ start:	BIPUSH 0
 // il seguente ciclo while viene ripetuto tante volte quante sono gli operandi
 // da leggere e sommare. Si noti che la somma tra l'operando appena letto e la
 // somma di tutti gli operandi precedenti avviene ad ogni iterazione, si sfrutta
-// l'indirezzamento a stack
+// l'indirizzamento a stack
 // =============================================================================
 inizio:	ILOAD #var
 	LDC_W ADDENDI		
@@ -120,35 +120,35 @@ fine:   HALT
 // come parametro.
 // Per realizzare la stampa si usano due numeri: uno è
 // quello che deve essere stampato, l'altro è un numero
-// fittizzio, ma diverso da 0, che viene moltiplicato per 2
+// fittizio, ma diverso da 0, che viene moltiplicato per 2
 // (<< 1) fino a che non diventa nullo. A ogni iterazione
 // oltre a moltiplicare il numero fittizio, si moltiplica 
 // per 2 il valore da stampare. Se ne controlla la positività
 // o meno (bit più significativo) per sapere se stampare 1
 // (negativo) o 0 (positivo).
-// Ci si riferisce sempre a numero fittizzio o x, ma in realtà
+// Ci si riferisce sempre a numero fittizio o x, ma in realtà
 // questi due non cambiano dato che x non è mai modificato e
-// il numero fittizzio non è neanche una variabile, questo
+// il numero fittizio non è neanche una variabile, questo
 // perché si preferisce utilizzare l'indirizzamento a stack
 // *************************************************************
 .method stampabin(x)
-	BIPUSH -1	// numero fittizzio, diverso da 0
+	BIPUSH -1	// numero fittizio, diverso da 0
 	ILOAD x		// numero da stampare
 // do {
 ciclo:	DUP
 	IFLT 1case	// controllo se il bit più significativo di x è 1 (x è negativo)
 	BIPUSH 0x30	// 0, il bit più significativo di x è 0, allora x è positivo
 print:	OUT
-	SWAP		// scambio x con il numero fittizzio
+	SWAP		// scambio x con il numero fittizio
 	DUP		
-	IADD		// numero fittizzio * 2 == numero fittizzio + numero fittizzio
+	IADD		// numero fittizio * 2 == numero fittizio + numero fittizio
 	DUP
-	IFEQ fine	// if (numero fittizzio == 0) goto fine;
-			// se numero fittizzio * 2 == 0, allora ho finito, altrimenti no. Si noti che si fa 
-			// prima il controllo sul numero fittizzio e solo successivamente si moltiplica 
+	IFEQ fine	// if (numero fittizio == 0) goto fine;
+			// se numero fittizio * 2 == 0, allora ho finito, altrimenti no. Si noti che si fa 
+			// prima il controllo sul numero fittizio e solo successivamente si moltiplica 
 			// per due il valore di x. Questo perché non è necessario moltiplicare per due x,
-			// visto che questa diramazione ci porta a un IRETURN si scambia numero fittizzio e x
-	SWAP		// scambio numero fittizzio con x
+			// visto che questa diramazione ci porta a un IRETURN si scambia numero fittizio e x
+	SWAP		// scambio numero fittizio con x
 	DUP
 	IADD		// x * 2
 	GOTO ciclo	// } while (true);
@@ -197,15 +197,15 @@ leggi:	IN			// leggo il carattere digitato da tastiera
 	IFEQ fail		// controllo se la lettura è avvenuta (TOS != 0)
 	DUP			
 	BIPUSH 0x30		// 0
-	IF_ICMPLT fail		// scarto i caratteri con codifica ASCII < 0x30. Si noti l'utilizzo dell'istruzione implememntata nell'esercizio 1
+	IF_ICMPLT fail		// scarto i caratteri con codifica ASCII < 0x30. Si noti l'utilizzo dell'istruzione implemementata nell'esercizio 1
 	DUP				
 	BIPUSH 0x38		// 8
-	IF_ICMPLT return	// scarto i caratteri con codifica ASCII >= 0x38. Si noti l'utilizzo dell'istruzione implememntata nell'esercizio 1
+	IF_ICMPLT return	// scarto i caratteri con codifica ASCII >= 0x38. Si noti l'utilizzo dell'istruzione implemementata nell'esercizio 1
 	
 fail:	POP			// scarto qualsiasi carattere che non faccia parte della base ottale
 	GOTO leggi		// busy waiting: attendo un altro carattere da tastiera
 	
-return:	IRETURN			// restitusce un codice ASCII compreso tra 0x30 e 0x37 (estremi inclusi)
+return:	IRETURN			// restituisce un codice ASCII compreso tra 0x30 e 0x37 (estremi inclusi)
 .end-method
 
 // *************************************************************
@@ -249,7 +249,7 @@ return:	IRETURN			// restitusce un codice ASCII compreso tra 0x30 e 0x37 (estrem
 // il numero da inserire non è 1 allora sarà 2,
 // perché il massimo numero di operandi (si veda la
 // costante ADDENDI) è 2. Se ADDENDI == 3, allora
-// in questo caso bisognerebbe verifcare se num è 2 o
+// in questo caso bisognerebbe verificare se num è 2 o
 // 3. Per 3 si stamperà la stringa "terzo", per 4
 // "quarto" e così via
 // NB: con ADDENDI >= 3 si richiede una modifica del

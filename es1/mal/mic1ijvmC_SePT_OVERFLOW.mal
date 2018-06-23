@@ -188,7 +188,7 @@ POS   N = H; if (N) goto OVERFLOW; else goto NO_OVERFLOW
 //			NEG   N = H; if (N) goto NO_OVERFLOW; else goto OVERFLOW
 // Tuttavia questa implementazione non è accettabile perché prima (label POS) abbiamo definito che la label OVERFLOW ha un
 // indirizzo distante 256 (0x100) rispetto la label NO_OVERFLOW, ma adesso stiamo facendo l'esatto opposto. Il compilatore MAL 
-// avrebbe dei problemi nell'assegnare gli indirizzi alle labels. Ovviamo all'inconveniete facendo il complemento a uno dell'
+// avrebbe dei problemi nell'assegnare gli indirizzi alle labels. Ovviamo all'inconveniente facendo il complemento a uno dell'
 // operando TOS, contenuto nel registro H, scambiando in questo modo le label nelle diramazioni. Si noti che il valore assoluto 
 // dell'operando non è lo stesso, ma a noi interessa solo il segno.
 // ================================================================================================================================
@@ -210,10 +210,10 @@ NO_OVERFLOW N = OPC - H; if (N) goto T; else goto F // If top 2 words are OPC < 
 // ================================================================================================================================
 // viene raggiunta solo nel caso in cui i segni siano discordi, ovvero quando si ha una possibilità di OVERFLOW, tenendo in 
 // considerazione le casistiche trattate nella relazione (si veda sezione "DISCUSSIONE DEI PROBLEMI DA AFFRONTARE E DELLA SOLUZIONE 
-// INDIVIDUATA") abbiamo solo due casi in cui si verifca OVERFLOW per tanto possiamo semplicemente controllare il segno di uno solo 
+// INDIVIDUATA") abbiamo solo due casi in cui si verifica OVERFLOW per tanto possiamo semplicemente controllare il segno di uno solo 
 // dei due operandi per restituire il risultato del confronto di IF_ICMPLT, in questo caso si è scelto OPC, ma equivalentemente vale:
 // 			OVERFLOW N = NOT H; if (N) goto T; else goto F
-// Quest'ultima però richiede un'operazione supplemenatare alla ALU ovvero il complemento a uno di H.
+// Quest'ultima però richiede un'operazione supplementare alla ALU ovvero il complemento a uno di H.
 // ================================================================================================================================
 
 OVERFLOW N = OPC; if (N) goto T; else goto F

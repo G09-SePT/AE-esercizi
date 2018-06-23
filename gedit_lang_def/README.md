@@ -8,6 +8,6 @@ si permette l'inserimento, all'interno della $HOME, dei file corredati.
 ---
 **NOTE**
 
-It works with almost all markdown flavours (the below blank line matters).
+L'esecuzione dello script comporta, per $USER, l'estensione del file classic.xml. Questo script non esegue una wide installation nel SO, per tanto deve essere eseguito da ogni utente che vuole aggiungere la syntax highlighting su Gedit. 
 
 ---

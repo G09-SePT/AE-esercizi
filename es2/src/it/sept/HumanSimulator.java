@@ -4,10 +4,10 @@ import java.util.Random;
 import java.util.Vector;
 
 /**
- * 
+ * Classe che serve ad eseguire test automatizzati
  * 
  * @author Alderico.
- * @version 2018.0
+ * @version 2018.06.23
  */
 public class HumanSimulator
 {
@@ -41,7 +41,7 @@ public class HumanSimulator
 	/**
 	 * Metodo che viene chiamato quando viene eseguita un'istruzione OUT
 	 * Aggiunge i caratteri ricevuti al buffer ed esegue il test
-	 * @param data
+	 * @param caratteri da scrivere nel buffer
 	 */
 	public static void setInput(String data)
 	{
@@ -75,7 +75,7 @@ public class HumanSimulator
 
 	/**
 	 * Controlla se il risultato è giusto, in caso positivo prosegue e scrive sulla console il risultato del test
-	 * @param risultato
+	 * @param risultato calcolato dal programma IJVM
 	 */
 	private static void repeat(String risultato)
 	{
@@ -93,8 +93,8 @@ public class HumanSimulator
 
 	/**
 	 * Testa il risultato prodotto dal programma IJVM confrontandolo con quello calcolato da java
-	 * @param risultato
-	 * @return
+	 * @param risultato calcolato dal programma IJVM
+	 * @return true se il risultato è corretto, false altrimenti
 	 */
 	static boolean testRisultato(String risultato)
 	{
@@ -103,7 +103,7 @@ public class HumanSimulator
 		if (n1 > 0 && n2 > 0 && somma < 0 && risultato.contains("OVERFLOW"))
 			return true;
 		String javaRes = String.format("%32s", Integer.toBinaryString(somma)).replace(' ', '0');
-		clearReadBuffer();
+		clearReadBuffer();//Pulisce il buffer per poter ricominciare con un altro test
 		//System.out.println("D: " + javaRes + " " + risultato.substring(0,31));
 		return javaRes.substring(0,31).equals(risultato.substring(0,31));
 	}

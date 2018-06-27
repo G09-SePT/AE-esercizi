@@ -10,7 +10,7 @@ FLAG 1				// 0 per evitare la stampa delle cifre in input sulla console, FLAG >=
 ADDENDI 2			// numero di addendi da sommare
 .end-constant
 
-.main
+.main	// start of program
 .var
 #var	// variabile contatore
 .end-var

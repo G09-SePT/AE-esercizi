@@ -24,7 +24,7 @@
 // -----------------------------------------------------------
 .end-constant
 
-.main
+.main	// start of program
 .var
 	tos
 	opc

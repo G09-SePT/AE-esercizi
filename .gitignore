@@ -55,6 +55,7 @@ dkms.conf
 *.mic1
 *.ijvm
 *.mne
+*.dbg
 
 # CLion files
 .idea/

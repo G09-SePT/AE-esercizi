@@ -39,11 +39,11 @@ UNMILIARDO 1000000000 // un miliardo (massima potenza di 10 in un numero su 32 b
 .end-main
 
 // Metodo ricorsivo che stampa le mosse necessarie per spostare n dischi, 
-// giï¿½ posizionati dall'alto al basso in ordine crescente di dimensione,
+// già posizionati dall'alto al basso in ordine crescente di dimensione,
 // dal piolo a al piolo b utilizzando anche il piolo c come punto di appoggio
-// intermedio e con il vincolo che non si puï¿½ mai posizionare 
-// un disco sopra ad uno piï¿½ piccolo. 
-// I pioli sono numerati 1, 2 e 3. Dati gli indici di 2 pioli (a e b) si puï¿½ 
+// intermedio e con il vincolo che non si può mai posizionare 
+// un disco sopra ad uno più piccolo. 
+// I pioli sono numerati 1, 2 e 3. Dati gli indici di 2 pioli (a e b) si può 
 // calcolare l'indice del terzo come c=6-a-b
 .method torriHanoi(n,a,b)
 .var
@@ -70,8 +70,8 @@ c
   ILOAD a
   ILOAD b
   INVOKEVIRTUAL sposta // stampa lo spostamento di 1 disco dal piolo a al b:
-                       // ï¿½ ciï¿½ che farebbe torriHanoi(1,a,b)
-                       // ma cosï¿½ si risparmia una INVOKEVIRTUAL
+                       // è ciò che farebbe torriHanoi(1,a,b)
+                       // ma così si risparmia una INVOKEVIRTUAL
   IADD
   LDC_W OBJREF
   ILOAD n
@@ -108,13 +108,13 @@ IRETURN
   OUT
   BIPUSH 0x0A 
   OUT
-  BIPUSH 1 // ritorna 1  cioï¿½  il numero di mosse per spostare 
+  BIPUSH 1 // ritorna 1  cioè  il numero di mosse per spostare 
            // un disco solo dal piolo i al piolo j
   IRETURN
 .end-method
 
 // il metodo StampaDecimale(n) stampa il numero n utilizzando una rappresentazione in base 10
-// il metodo ï¿½ abbastanza efficiente perchï¿½ evita di fare tante divisioni per 10
+// il metodo è abbastanza efficiente perché evita di fare tante divisioni per 10
 // ma utilizza le potenze di 10 per ottenere direttamente le cifre in ordine decrescente di peso
 .method StampaDecimale(n)
 .var
@@ -156,7 +156,7 @@ DUP  // ne lascio una copia sullo stack e lo memorizzo in potenza
 ISTORE potenza
 GOTO iniziowhile
 // ----------- FINE BODY DEL while che genera le potenze del 10
-fine_while: // alla fine se n-potenza<0  si elimina dalla cima dello stack il valore di potenza piï¿½ alto
+fine_while: // alla fine se n-potenza<0  si elimina dalla cima dello stack il valore di potenza più alto
 ILOAD n     
 ILOAD potenza
 ISUB
@@ -167,7 +167,7 @@ POP
 
 inizio_dowhile:
 // do { POP potenza;
-// if (potenza==1) stampa n+0x30; // siamo arrivati alle unitï¿½
+// if (potenza==1) stampa n+0x30; // siamo arrivati alle unità
 DUP
 ISTORE potenza
 BIPUSH 1
@@ -219,7 +219,7 @@ IRETURN
 // metodo Leggidecimale(maxcifre) accetta in input fino a maxcifre cifre decimali
 // e restituisce il corrispondente valore sul top dello stack.
 // Per un corretto funzionamento, deve essere maxcifre<=10 inoltre 
-// il numero inserito non puï¿½ essere maggiore di 2.147.483.647
+// il numero inserito non può essere maggiore di 2.147.483.647
 // per ora non faccio controllo sul valore vero e proprio.
 // Utilizza il metodo LeggiCifraDecimale() incluso di seguito
 
@@ -227,7 +227,7 @@ IRETURN
 // Legge un numero in base 10 di al massimo maxcifre, restituendo il corrispondente valore.
 // Se vengono inserite maxcifre interrompe automaticamente la lettura di nuovi caratteri e restituisce
 // il valore. Il carattere per indicare la fine dell'inserimento prima di aver raggiunto
-// il limite maxcifre ï¿½ INVIO (0x0A).
+// il limite maxcifre è INVIO (0x0A).
 // Utilizza il metodo: LeggiCifraDecimale() 
 // 
 .var
@@ -240,30 +240,30 @@ num
     ISTORE cont // maxcifre - massimo numero di cifre accettate
 ciclo:  // while (cont>0)
     ILOAD cont
-    IFEQ fineinvio // esco se ho giï¿½ inserito maxcifre caratteri
+    IFEQ fineinvio // esco se ho già inserito maxcifre caratteri
 nuovacifra:
     LDC_W OBJREF
     INVOKEVIRTUAL LeggiCifraDecimale // leggo da tastiera 1 carattere num. tra "0" e "9", o invio
-checkinvio:   // verifica se ï¿½ stato restituito il carattere Invio (che indica la fine dell'inserimento)
+checkinvio:   // verifica se è stato restituito il carattere Invio (che indica la fine dell'inserimento)
     DUP       // duplico in cima allo stack il carattere restituito dal metodo LeggiCifraOttale 
-    LDC_W INVIO // per verificare se ï¿½ stata letta una cifra oppure 0x0A=invio
+    LDC_W INVIO // per verificare se è stata letta una cifra oppure 0x0A=invio
     IF_ICMPEQ fine // se  la cima dello stack contiene invio esce dal ciclo
     LDC_W ZERO
     ISUB // trasformo il carattere ASCII nel suo valore (da 0 a 9) sottraendo il codice ASCII di '0'
-    //---  MOLTIPLICA num PER 10 (lo faccio come somma di num*2 + num*8 (sarebbe piï¿½ costoso realizzarlo con un ciclo di 10 somme)
+    //---  MOLTIPLICA num PER 10 (lo faccio come somma di num*2 + num*8 (sarebbe più costoso realizzarlo con un ciclo di 10 somme)
     ILOAD num
     DUP
-    IADD // ora sullo stack c'ï¿½ num*2
+    IADD // ora sullo stack c'è num*2
     DUP 
     DUP
-    IADD // ora sulle due posizioni affioranti dello stack c'ï¿½  num*2 e num*4 (quest'ultimo in mem[SP])
+    IADD // ora sulle due posizioni affioranti dello stack c'è  num*2 e num*4 (quest'ultimo in mem[SP])
     DUP
-    IADD // ora sulle due posizioni affioranti dello stack c'ï¿½  num*2 e num*8 (quest'ultimo in mem[SP])
-    IADD // ora sulle cima dello stack c'ï¿½ num*10
+    IADD // ora sulle due posizioni affioranti dello stack c'è  num*2 e num*8 (quest'ultimo in mem[SP])
+    IADD // ora sulle cima dello stack c'è num*10
     // ----------- e ora sommo il valore dell'ultima cifra inserita
     IADD 
     ISTORE num // risultato finale: num=num*10+valore-in-cima-allo-stack
-    IINC cont -1 // decremento cont per verificare se sono giï¿½ state inserite maxcifre
+    IINC cont -1 // decremento cont per verificare se sono già state inserite maxcifre
     GOTO ciclo // fine while 
 fineinvio:
     LDC_W INVIO // stampo invio se ho inserito il massimo numero di caratteri
@@ -301,12 +301,5 @@ finechr:
     OUT // echo carattere
 IRETURN
 .end-method
-
-
-
-
-
-
-
 
 

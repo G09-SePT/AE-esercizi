@@ -191,6 +191,14 @@ POS   N = H; if (N) goto OVERFLOW; else goto NO_OVERFLOW
 // avrebbe dei problemi nell'assegnare gli indirizzi alle labels. Ovviamo all'inconveniente facendo il complemento a uno dell'
 // operando TOS, contenuto nel registro H, scambiando in questo modo le label nelle diramazioni. Si noti che il valore assoluto 
 // dell'operando non è lo stesso, ma a noi interessa solo il segno.
+// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+// COMMENTI CONCLUSIVI: come già è stato evidenziato nella relazione, questa label ha dato qualche problema di implementazione.
+//			L'idea originaria era quella di cambiare il segno dell'operando in cima allo stack: infatti dalla matemati-
+//			ca sappiamo che il cambio di segno, in uno dei due membri in una disequazione, comporta il cambio 
+//			dell'operazione di confronto (<,>). Purtroppo però se le due word in cima allo stack sono negative, e in  
+//			particolare TOS è il più grande valore (negativo) su 32 bit, il confronto ha un comportamento imprevisto, 
+//			per tanto si è dovuto ricorrere all'uso dell'operatore NOT evitando questo possibile overflow.
+// /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 // ================================================================================================================================
 
 NEG   N = NOT H; if (N) goto OVERFLOW; else goto NO_OVERFLOW

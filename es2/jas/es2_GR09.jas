@@ -146,8 +146,9 @@ print:	OUT
 	IFEQ fine	// if (numero fittizio == 0) goto fine;
 			// se numero fittizio * 2 == 0, allora ho finito, altrimenti no. Si noti che si fa 
 			// prima il controllo sul numero fittizio e solo successivamente si moltiplica 
-			// per due il valore di x. Questo perché non è necessario moltiplicare per due x,
-			// visto che questa diramazione ci porta a un IRETURN si scambia numero fittizio e x
+			// per due il valore di x. Questo perché si vuole risparmiare alcune istruzioni: infatti
+			// se  numero fittizio * 2 == 0 ==> x * 2 == 0, per tanto ho stampato tutte le cifre
+			// binarie che compongo x, salto alla label fine
 	SWAP		// scambio numero fittizio con x
 	DUP
 	IADD		// x * 2
@@ -163,8 +164,8 @@ fine:	IRETURN
 // compone un numero ottale di ncifre, le quali possono essere
 // stampate nel caso in cui flag != 0.
 // Si noti che non si fa uso della variabile "val", come è 
-// indicato nel PDF allegato, perché si sfrutta l'indirizzamento
-// a stack
+// indicato nel PDF dell'esercizio, perché si sfrutta 
+// l'indirizzamento a stack
 // NB: il codice qui proposto non fa controlli se il numero in
 //     input è positivo o no, si fida dell'utente :)
 // *************************************************************
@@ -197,10 +198,10 @@ leggi:	IN			// leggo il carattere digitato da tastiera
 	IFEQ fail		// controllo se la lettura è avvenuta (TOS != 0)
 	DUP			
 	BIPUSH 0x30		// 0
-	IF_ICMPLT fail		// scarto i caratteri con codifica ASCII < 0x30. Si noti l'utilizzo dell'istruzione implemementata nell'esercizio 1
+	IF_ICMPLT fail		// scarto i caratteri con codifica ASCII < 0x30. Si noti l'utilizzo dell'istruzione implementata nell'esercizio 1
 	DUP				
 	BIPUSH 0x38		// 8
-	IF_ICMPLT return	// scarto i caratteri con codifica ASCII >= 0x38. Si noti l'utilizzo dell'istruzione implemementata nell'esercizio 1
+	IF_ICMPLT return	// scarto i caratteri con codifica ASCII >= 0x38. Si noti l'utilizzo dell'istruzione implementata nell'esercizio 1
 	
 fail:	POP			// scarto qualsiasi carattere che non faccia parte della base ottale
 	GOTO leggi		// busy waiting: attendo un altro carattere da tastiera
@@ -359,7 +360,7 @@ leggicarattere: IN
 		BIPUSH 0x31		// controlla se il carattere è 0x31  (codice ASCII di '1')
 		IF_ICMPEQ fine		// se è stato inserito '1' lo restituisce al chiamante
 					
-nulla:  	POP			// se non è '0' nè '1' lo butto via e torno a leggere un carattere
+nulla:  	POP			// se non è '0' né '1' lo butto via e torno a leggere un carattere
 		GOTO leggicarattere	// busy waiting
 		
 fine: 		IRETURN 		// restituisce il carattere '0' o '1' inserito

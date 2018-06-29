@@ -145,7 +145,7 @@ ifeq3   TOS = MDR           // Put new top of stack in TOS
 ifeq4   Z = OPC; if (Z) goto T; else goto F // Branch on Z bit
 
 // ---------------------------------------------------------------------------------------------------------------------------------
-// VERSIONE CHE NON TIENE IN CONSIDERAZIONE DELLA POSIIBILITÀ DI OVERFLOW
+// VERSIONE CHE NON TIENE IN CONSIDERAZIONE DELLA POSSIBILITÀ DI OVERFLOW
 // - per una spiegazione approfondita si faccia riferimento al file mic1ijvmC_SePT_OVERFLOW.mal, il quale implementa
 //   la gestione dell'overflow, e alla sezione "DISCUSSIONE DEI PROBLEMI DA AFFRONTARE E DELLA SOLUZIONE INDIVIDUATA" della relazione
 //   allegata.

@@ -62,9 +62,9 @@ opc_loop:	ILOAD opc
 		// si riportano, sotto forma di commento, le relazioni che intercorrono tra 
 		// gli insiemi TOS e mem[SP - 1] (indicato con OPC), per ognuna delle 
 		// istruzioni di confronto. Il test non effettua controlli sulle relazioni, 
-		// se esse non vengono rispettate il test potrebbe dare risultati imprevisti. 
-		// Il controllo è stato omesso perché richiederebbe l'utilizzo  delle stesse 
-		// istruzioni che vengono testate.
+		// che intercorrono tra gli insiemi, se esse non vengono rispettate il test 
+		// potrebbe dare risultati imprevisti. Il controllo è stato omesso perché 
+		// richiederebbe l'utilizzo  delle stesse istruzioni che vengono testate.
 		// ES: IF_ICMPNE richiederebbe che 
 		// 	MIN_TOS != MIN_OPC && MAX_TOS != MAX_OPC
 		// l'operatore != viene realizzato con IF_ICMPNE, che deve essere testato

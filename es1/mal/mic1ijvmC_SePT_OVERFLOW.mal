@@ -218,7 +218,7 @@ NO_OVERFLOW N = OPC - H; if (N) goto T; else goto F // If top 2 words are OPC < 
 // ================================================================================================================================
 // viene raggiunta solo nel caso in cui i segni siano discordi, ovvero quando si ha una possibilità di OVERFLOW, tenendo in 
 // considerazione le casistiche trattate nella relazione (si veda sezione "DISCUSSIONE DEI PROBLEMI DA AFFRONTARE E DELLA SOLUZIONE 
-// INDIVIDUATA") abbiamo solo due casi in cui si verifica OVERFLOW per tanto possiamo semplicemente controllare il segno di uno solo 
+// INDIVIDUATA") abbiamo solo due casi in cui si verifica OVERFLOW. Per tanto possiamo semplicemente controllare il segno di uno solo 
 // dei due operandi per restituire il risultato del confronto di IF_ICMPLT, in questo caso si è scelto OPC, ma equivalentemente vale:
 // 			OVERFLOW N = NOT H; if (N) goto T; else goto F
 // Quest'ultima però richiede un'operazione supplementare alla ALU ovvero il complemento a uno di H.
